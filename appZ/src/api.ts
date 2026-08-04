@@ -1,13 +1,13 @@
 // // appZ/src/api.ts
-import axios from 'axios';
-import type { Todo } from './types/todo';
+import axios from "axios";
+import type { Todo } from "./types/todo";
 
 const API = axios.create({
-  baseURL: 'http://localhost:4002/api',
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
-  timeout: 10000, 
+  timeout: 10000,
 });
 
 API.interceptors.response.use(
