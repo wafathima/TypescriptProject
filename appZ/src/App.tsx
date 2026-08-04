@@ -459,7 +459,7 @@ export default function App() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style >{`
         @keyframes slideIn {
           from {
             opacity: 0;

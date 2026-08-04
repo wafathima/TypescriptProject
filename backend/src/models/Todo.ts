@@ -26,8 +26,12 @@ const TodoSchema = new Schema<ITodo>(
     versionKey: false,
     toJSON: {
       virtuals: true,
-      transform: (_doc, ret) => {
-        ret.id = ret.id.toString();
+      // transform: (_doc, ret) => {
+      //   ret.id = ret.id.toString();
+      //   delete ret._id;
+
+        transform: (_doc, ret: any) => {
+        ret.id = ret._id.toString();
         delete ret._id;
       },
     },
