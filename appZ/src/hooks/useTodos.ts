@@ -4,9 +4,11 @@ import type { Todo } from '../types/todo.js';
 import { todoAPI } from '../api.js';
 import axios from 'axios';
 
-const formatTodo = (todo: any): Todo => ({
-  ...todo,
-  id: todo.id || todo.id,
+
+const formatTodo = (todo: Partial<Todo> & { id: string }): Todo => ({
+  id: todo.id,
+  title: todo.title || '',
+  completed: todo.completed || false,
 });
 
 export const useTodos = () => {
@@ -46,15 +48,17 @@ export const useTodos = () => {
     }
   };
 
+  
   const toggleTodo = async (id: string, currentStatus: boolean) => {
-    try {
-      const updated = await todoAPI.update(id, { completed: !currentStatus });
-      const formatted = formatTodo(updated);
-      setTodos((prev) => prev.map((t) => (t.id === id ? formatted : t)));
-    } catch (err) {
-      handleCatchError(err, 'Could not update todo.');
-    }
-  };
+  try {
+    // Don't pass currentStatus, let the API handle it
+    const updated = await todoAPI.update(id, { completed: !currentStatus });
+    const formatted = formatTodo(updated);
+    setTodos((prev) => prev.map((t) => (t.id === id ? formatted : t)));
+  } catch (err) {
+    handleCatchError(err, 'Could not update todo.');
+  }
+};
 
   const updateTodo = async (id: string, updates: { title?: string; completed?: boolean }) => {
     try {
@@ -75,9 +79,21 @@ export const useTodos = () => {
     }
   };
 
+
   useEffect(() => {
-    fetchTodos();
-  }, []);
+  let isMounted = true;
+  
+  const loadTodos = async () => {
+    if (!isMounted) return;
+    await fetchTodos();
+  };
+  
+  loadTodos();
+  
+  return () => {
+    isMounted = false;
+  };
+}, []);
 
   return { 
     todos, 
@@ -89,3 +105,6 @@ export const useTodos = () => {
     deleteTodo 
   };
 };
+
+
+

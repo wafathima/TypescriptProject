@@ -8,7 +8,7 @@ import todoRouter from './routes/todoRoutes.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4002;
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/todoapp';
 mongoose.connect(MONGODB_URI)
